@@ -1,0 +1,6 @@
+{
+  "name": "Mani Minars Kids Wear",
+  "description": "Comfortable and stylish kids wear designed for everyday adventures. Premium quality fabric, soft and skin-friendly, durable stitching, trendy modern designs in sizes 1 to 12 years.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
