@@ -8,15 +8,23 @@ import {
   RotateCcw, 
   Ruler, 
   ChevronDown,
-  MessageCircle
+  MessageCircle,
+  FileText,
+  Lock,
+  HeartHandshake
 } from 'lucide-react';
-import { ALL_SIZES, AgeSize } from '../types';
+import { ALL_SIZES, AgeSize, ProductCategory, STORE_EMAIL, WHATSAPP_DISPLAY, WHATSAPP_NUMBER } from '../types';
+import { PolicyTab } from './PolicyModal';
 
 interface FooterProps {
-  onSelectCategory: (cat: any) => void;
+  onSelectCategory: (cat: ProductCategory) => void;
   onSelectSize: (size: AgeSize) => void;
   onOpenSizeGuide: () => void;
   onOpenTracking: () => void;
+  onOpenPolicy: (tab: PolicyTab) => void;
+  onOpenAdmin?: () => void;
+  isAdminLoggedIn?: boolean;
+  onNavigate?: (path: string) => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -24,207 +32,261 @@ export const Footer: React.FC<FooterProps> = ({
   onSelectSize,
   onOpenSizeGuide,
   onOpenTracking,
+  onOpenPolicy,
+  onOpenAdmin,
+  isAdminLoggedIn = false,
+  onNavigate,
 }) => {
-  const [faqOpen, setFaqOpen] = useState<number | null>(null);
-
-  const faqs = [
-    {
-      q: 'Why are elastic waistbands so important in Mani Minars kids wear?',
-      a: 'Children experience growth spurts and require full agility on playgrounds. Our denim cargo shorts and casual bottoms feature an expandable ribbed elastic waistband with soft interior lining and functional drawstrings that eliminate uncomfortable pinches, leaving no red marks on delicate skin while lasting through growth phases.'
-    },
-    {
-      q: 'Are your fabrics 100% pre-shrunk and skin-friendly?',
-      a: 'Yes! We use certified long-staple combed cotton and washed denim that is pre-shrunk during fabrication. We also use flatlock and double-needle stitching with hypoallergenic dyes so there are zero scratchy points or irritating neck tags.'
-    },
-    {
-      q: 'How fast is delivery and how does the free shipping policy work?',
-      a: 'We offer 100% Free Express Shipping on all orders with no minimum purchase required. Orders are packed within 24 hours and delivered to your doorstep within 2 to 3 business days, complete with real-time tracking.'
-    },
-    {
-      q: 'Can I order directly over WhatsApp?',
-      a: 'Absolutely! Click the "WhatsApp Order" button on any product card or in your cart. A pre-filled message with your selected size, color, and product name will open immediately with our friendly kids stylist team.'
-    }
-  ];
-
   return (
-    <footer className="bg-slate-900 text-white pt-14 pb-8 border-t border-slate-800">
+    <footer className="bg-slate-950 text-white pt-14 pb-8 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* SEO FAQ Section */}
-        <div className="border-b border-slate-800 pb-12 mb-12">
-          <h3 className="text-center text-xs font-bold uppercase tracking-widest text-red-500 mb-2">
-            Frequently Asked Questions
-          </h3>
-          <h4 className="text-center text-xl sm:text-2xl font-extrabold text-white font-display mb-8">
-            Everything Parents Ask About Mani Minars
-          </h4>
-
-          <div className="max-w-3xl mx-auto space-y-3">
-            {faqs.map((faq, idx) => {
-              const isOpen = faqOpen === idx;
-              return (
-                <div 
-                  key={idx}
-                  className="bg-slate-800/80 rounded-2xl border border-slate-700/80 overflow-hidden transition-colors"
-                >
-                  <button
-                    onClick={() => setFaqOpen(isOpen ? null : idx)}
-                    className="w-full p-4 text-left flex items-center justify-between text-xs sm:text-sm font-bold text-slate-100 hover:text-white"
-                  >
-                    <span>{faq.q}</span>
-                    <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isOpen ? 'rotate-180 text-red-500' : ''}`} />
-                  </button>
-                  {isOpen && (
-                    <div className="px-4 pb-4 text-xs text-slate-300 leading-relaxed border-t border-slate-700/50 pt-3">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Main Footer Columns */}
+        {/* 4 Main Footer Navigation Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 pb-12 border-b border-slate-800">
           
-          {/* Brand Col */}
+          {/* Column 1: Brand & Contact Info */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-1.5">
-              <span className="text-2xl font-extrabold tracking-tight text-white font-display">
-                MANI <span className="text-red-500">MINARS</span>
+            <div className="flex items-center gap-2">
+              <span className="text-2xl font-black tracking-tight text-white font-display">
+                Mani <span className="text-red-600">Minars</span>
               </span>
-              <span className="w-2 h-2 rounded-full bg-red-500 inline-block" />
+              <span className="text-[10px] bg-red-600 text-white font-extrabold uppercase px-2 py-0.5 rounded-sm">
+                Kids Wear
+              </span>
             </div>
-            
+
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              Comfortable and stylish kids wear designed for everyday adventures. Premium quality combed cotton fabrics, soft & skin-friendly textures, and durable stitching made to outlast active childhood play.
+              Premium Kids Fashion for Every Adventure. Stylish, comfortable & affordable clothing for boys and girls aged 1 to 12 Years. Crafted with 100% skin-safe combed cotton, stretch denim, and expandable elastic waistbands.
             </p>
 
-            <div className="pt-2 space-y-2 text-xs text-slate-300">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span>WhatsApp Helpline: +92 304 6466815</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-blue-400 shrink-0" />
-                <a href="mailto:maniminarskids@gmail.com" className="hover:text-blue-300 transition-colors">
-                  maniminarskids@gmail.com
-                </a>
+            <div className="space-y-2 text-xs text-slate-300 pt-1">
+              <a 
+                href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5 shrink-0" />
+                <span className="font-semibold">{WHATSAPP_DISPLAY} (WhatsApp Helpline)</span>
+              </a>
+
+              <a 
+                href={`mailto:${STORE_EMAIL}`}
+                className="flex items-center gap-2 text-blue-300 hover:text-white transition-colors"
+              >
+                <Mail className="w-3.5 h-3.5 shrink-0" />
+                <span>{STORE_EMAIL}</span>
+              </a>
+
+              <div className="flex items-center gap-2 text-slate-400">
+                <MapPin className="w-3.5 h-3.5 shrink-0" />
+                <span>Lahore • Karachi • Islamabad • Nationwide Pakistan</span>
               </div>
             </div>
           </div>
 
-          {/* Quick Collections */}
+          {/* Column 2: Categories */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Featured Collections
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 font-display">
+              Shop Categories
             </h4>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
                 <button 
-                  onClick={() => onSelectCategory('denim-cargo')} 
-                  className="hover:text-white transition-colors"
+                  onClick={() => onSelectCategory('boys-collection')} 
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Denim Cargo Shorts
+                  Boys Collection
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => onSelectCategory('cotton-shirts')} 
-                  className="hover:text-white transition-colors"
+                  onClick={() => onSelectCategory('girls-collection')} 
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Casual Cotton Shirts
+                  Girls Collection
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => onSelectCategory('boys-fashion')} 
-                  className="hover:text-white transition-colors"
+                  onClick={() => onSelectCategory('new-arrivals')} 
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Boys Fashion Wear
+                  New Arrivals (2026)
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => onSelectCategory('trendy-outfits')} 
-                  className="hover:text-white transition-colors"
+                  onClick={() => onSelectCategory('denim-collection')} 
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  Trendy Children's Outfits
+                  Denim Collection
                 </button>
               </li>
               <li>
                 <button 
-                  onClick={() => onSelectCategory('all')} 
-                  className="hover:text-white transition-colors"
+                  onClick={() => onSelectCategory('party-wear')} 
+                  className="hover:text-white transition-colors cursor-pointer"
                 >
-                  All Kids Essentials
+                  Party Wear
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => onSelectCategory('casual-wear')} 
+                  className="hover:text-white transition-colors cursor-pointer"
+                >
+                  Casual Wear
                 </button>
               </li>
             </ul>
           </div>
 
-          {/* Available Sizes quick links */}
+          {/* Column 3: Customer Care & Policies (Requirement 6) */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Shop By Age (1-12Y)
-            </h4>
-            <div className="grid grid-cols-2 gap-1.5 text-xs text-slate-400">
-              {ALL_SIZES.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => onSelectSize(size)}
-                  className="text-left hover:text-red-400 transition-colors py-0.5"
-                >
-                  {size}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Parent Customer Care */}
-          <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Parent Assistance
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 font-display">
+              Customer Policies
             </h4>
             <ul className="space-y-2 text-xs text-slate-400">
               <li>
-                <button onClick={onOpenSizeGuide} className="hover:text-white transition-colors flex items-center gap-1">
-                  <Ruler className="w-3.5 h-3.5 text-blue-400" />
-                  Growth & Size Calculator
+                <button 
+                  onClick={() => onOpenPolicy('about')} 
+                  className="hover:text-red-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <HeartHandshake className="w-3.5 h-3.5 text-red-500" />
+                  <span>About Us</span>
                 </button>
               </li>
               <li>
-                <button onClick={onOpenTracking} className="hover:text-white transition-colors flex items-center gap-1">
+                <button 
+                  onClick={() => onOpenPolicy('contact')} 
+                  className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Phone className="w-3.5 h-3.5 text-emerald-500" />
+                  <span>Contact Us</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => onOpenPolicy('shipping')} 
+                  className="hover:text-blue-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Truck className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Shipping Policy</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => onOpenPolicy('returns')} 
+                  className="hover:text-amber-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <RotateCcw className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Return Policy</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => onOpenPolicy('privacy')} 
+                  className="hover:text-purple-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Lock className="w-3.5 h-3.5 text-purple-400" />
+                  <span>Privacy Policy</span>
+                </button>
+              </li>
+              <li>
+                <button 
+                  onClick={() => onOpenPolicy('terms')} 
+                  className="hover:text-cyan-400 transition-colors flex items-center gap-1.5 cursor-pointer"
+                >
+                  <ShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Terms & Conditions</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Parent Tools & Sizing */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4 font-display">
+              Sizes & Tools
+            </h4>
+            <ul className="space-y-2.5 text-xs text-slate-400 mb-4">
+              <li>
+                <button onClick={onOpenSizeGuide} className="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer">
+                  <Ruler className="w-3.5 h-3.5 text-blue-400" />
+                  <span>Size & Age Guide (1-12Y)</span>
+                </button>
+              </li>
+              <li>
+                <button onClick={onOpenTracking} className="hover:text-white transition-colors flex items-center gap-1.5 cursor-pointer">
                   <Truck className="w-3.5 h-3.5 text-red-400" />
-                  Live Order Tracking
+                  <span>Track Your Delivery</span>
                 </button>
               </li>
               <li>
                 <a 
-                  href="https://wa.me/923046466815" 
+                  href={`https://wa.me/${WHATSAPP_NUMBER}`}
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-emerald-400 transition-colors flex items-center gap-1"
+                  className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-emerald-400" />
-                  WhatsApp Direct Order (+92 304 6466815)
+                  <span>Direct Order on WhatsApp</span>
                 </a>
               </li>
             </ul>
+
+            <div className="pt-2">
+              <span className="text-[11px] font-bold text-slate-400 block mb-1">Quick Select Size:</span>
+              <div className="flex flex-wrap gap-1">
+                {ALL_SIZES.slice(0, 6).map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => onSelectSize(size)}
+                    className="px-1.5 py-0.5 bg-slate-900 border border-slate-800 hover:border-red-500 rounded text-[10px] text-slate-400 hover:text-white transition-colors"
+                  >
+                    {size.replace(' Years', 'Y')}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p>© 2026 Mani Minars Kids Wear. Comfortable & Stylish Kids Wear Designed for Everyday Adventures.</p>
-          <div className="flex items-center gap-4">
-            <span>✓ 100% Skin Safe Cotton</span>
+        {/* Bottom Bar with SEO keywords & copyright */}
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <p>© 2026 Mani Minars Kids Wear. Premium Kids Fashion for Every Adventure.</p>
+          <div className="flex flex-wrap items-center justify-center gap-3 text-[11px] text-slate-400">
+            <span>Kids Clothes Pakistan</span>
             <span>•</span>
-            <span>Free Shipping on All Orders</span>
+            <span>Boys Shirts</span>
             <span>•</span>
-            <span>Sizes 1-12 Years</span>
+            <span>Kids Denim Shorts</span>
+            <span>•</span>
+            <span>Children's Fashion</span>
+            <span>•</span>
+            {!isAdminLoggedIn ? (
+              <button
+                id="footer-admin-login-btn"
+                onClick={() => onNavigate ? onNavigate('/admin/login') : (onOpenAdmin && onOpenAdmin())}
+                className="hover:text-amber-300 text-slate-400 font-medium transition-colors inline-flex items-center gap-1 cursor-pointer"
+                title="Store Admin Login (/admin/login)"
+              >
+                <Lock className="w-2.5 h-2.5 text-amber-400" />
+                <span>Admin Login</span>
+              </button>
+            ) : (
+              <button
+                id="footer-admin-dashboard-btn"
+                onClick={() => onNavigate ? onNavigate('/admin/dashboard') : (onOpenAdmin && onOpenAdmin())}
+                className="hover:text-amber-300 text-amber-400 font-bold transition-colors inline-flex items-center gap-1 cursor-pointer"
+                title="Store Admin Dashboard (/admin/dashboard)"
+              >
+                <Lock className="w-2.5 h-2.5 text-amber-400" />
+                <span>Admin Dashboard (Logged In)</span>
+              </button>
+            )}
           </div>
         </div>
 

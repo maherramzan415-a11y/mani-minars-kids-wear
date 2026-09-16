@@ -29,15 +29,19 @@ export const STORE_EMAIL = 'maniminarskids@gmail.com';
 
 export type ProductCategory = 
   | 'all'
-  | 'denim-cargo'
-  | 'cotton-shirts'
-  | 'boys-fashion'
-  | 'trendy-outfits';
+  | 'boys-collection'
+  | 'girls-collection'
+  | 'new-arrivals'
+  | 'denim-collection'
+  | 'party-wear'
+  | 'casual-wear';
+
+export type PolicyTab = 'about' | 'contact' | 'shipping' | 'returns' | 'privacy' | 'terms';
 
 export interface Product {
   id: string;
   name: string;
-  category: 'denim-cargo' | 'cotton-shirts' | 'boys-fashion' | 'trendy-outfits';
+  category: ProductCategory;
   categoryLabel: string;
   price: number;
   originalPrice?: number;
@@ -52,8 +56,12 @@ export interface Product {
   colors: { name: string; hex: string }[];
   isNewArrival?: boolean;
   isBestSeller?: boolean;
+  isTrending?: boolean;
+  isCasualShirt?: boolean;
   inStock: boolean;
+  stockQuantity: number;
   elasticWaistband?: boolean;
+  gender?: 'boys' | 'girls' | 'unisex';
 }
 
 export interface CartItem {
@@ -74,6 +82,8 @@ export interface OrderItem {
   image: string;
 }
 
+export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+
 export interface Order {
   id: string;
   date: string;
@@ -88,7 +98,7 @@ export interface Order {
   shipping: number;
   total: number;
   paymentMethod: 'cod' | 'card' | 'wallet';
-  status: 'confirmed' | 'packed' | 'shipped' | 'delivered';
+  status: OrderStatus;
   trackingNumber: string;
   estimatedDelivery: string;
 }

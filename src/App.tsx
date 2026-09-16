@@ -5,7 +5,9 @@ import {
   AgeSize, 
   CartItem, 
   Order, 
-  CustomerReview 
+  CustomerReview,
+  WHATSAPP_NUMBER,
+  WHATSAPP_DISPLAY
 } from './types';
 import { INITIAL_PRODUCTS } from './data/products';
 import { CUSTOMER_REVIEWS } from './data/reviews';
@@ -13,6 +15,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ValueProps } from './components/ValueProps';
 import { SizeSelectorBar } from './components/SizeSelectorBar';
+import { FeaturedSections } from './components/FeaturedSections';
 import { FeaturedCollections } from './components/FeaturedCollections';
 import { ProductGrid } from './components/ProductGrid';
 import { ProductQuickView } from './components/ProductQuickView';
@@ -21,10 +24,14 @@ import { CartDrawer } from './components/CartDrawer';
 import { CheckoutModal } from './components/CheckoutModal';
 import { OrderTrackingModal } from './components/OrderTrackingModal';
 import { AdminDashboard } from './components/AdminDashboard';
+import { AdminLogin } from './components/AdminLogin';
 import { CustomerReviews } from './components/CustomerReviews';
+import { FAQSection } from './components/FAQSection';
 import { WhatsAppFloatingButton } from './components/WhatsAppFloatingButton';
 import { Newsletter } from './components/Newsletter';
 import { Footer } from './components/Footer';
+import { PolicyModal, PolicyTab } from './components/PolicyModal';
+import { ShieldCheck, LogOut, SlidersHorizontal } from 'lucide-react';
 
 export default function App() {
   // Master Store Data
@@ -45,41 +52,41 @@ export default function App() {
       {
         id: 'MM-8942',
         date: 'Yesterday at 4:15 PM',
-        customerName: 'Sarah Jenkins',
-        customerPhone: '+1 (555) 234-5678',
-        customerEmail: 'sarah.jenkins@example.com',
-        address: '742 Evergreen Terrace',
-        city: 'Springfield',
+        customerName: 'Muhammad Ali',
+        customerPhone: '+92 300 1234567',
+        customerEmail: 'm.ali@example.com',
+        address: 'House 42, Street 7, Gulberg III',
+        city: 'Lahore',
         items: [
           {
             id: 'demo-1',
             productId: 'mm-01',
-            name: 'Kids Denim Cargo Shorts with Elastic Waistband',
+            name: 'Classic Boys Oxford Button-Down Shirt',
             price: 24.99,
             size: '4-5 Years',
-            color: 'Vintage Blue',
+            color: 'Sky Blue',
             quantity: 1,
             image: 'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=800&q=80'
           },
           {
             id: 'demo-2',
-            productId: 'mm-02',
-            name: 'Breezy Kids Casual Cotton Shirt',
-            price: 21.99,
+            productId: 'mm-04',
+            name: 'Kids Comfort Denim Cargo Shorts with Elastic Waist',
+            price: 26.99,
             size: '4-5 Years',
-            color: 'Sky Blue',
+            color: 'Vintage Indigo',
             quantity: 1,
-            image: 'https://images.unsplash.com/photo-1503944547468-b65924483ce8?auto=format&fit=crop&w=800&q=80'
+            image: 'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=800&q=80'
           }
         ],
-        subtotal: 46.98,
-        discount: 7.05,
+        subtotal: 51.98,
+        discount: 7.80,
         shipping: 0,
-        total: 39.93,
+        total: 44.18,
         paymentMethod: 'cod',
         status: 'shipped',
         trackingNumber: 'TRK-MM-584920',
-        estimatedDelivery: 'Tomorrow by 3:00 PM'
+        estimatedDelivery: 'Tomorrow by 3:00 PM PKT'
       }
     ];
   });
@@ -91,7 +98,7 @@ export default function App() {
       {
         product: INITIAL_PRODUCTS[0],
         selectedSize: '4-5 Years',
-        selectedColor: 'Vintage Blue',
+        selectedColor: 'Sky Blue',
         quantity: 1
       }
     ];
@@ -108,14 +115,14 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Currency
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('PKR');
   const currencyRates: Record<string, { symbol: string; rate: number }> = {
-    USD: { symbol: '$', rate: 1 },
     PKR: { symbol: '₨ ', rate: 280 },
+    USD: { symbol: '$', rate: 1 },
     GBP: { symbol: '£', rate: 0.79 },
     EUR: { symbol: '€', rate: 0.92 },
   };
-  const activeCurrency = currencyRates[currency] || currencyRates.USD;
+  const activeCurrency = currencyRates[currency] || currencyRates.PKR;
 
   // Modals
   const [cartOpen, setCartOpen] = useState(false);
@@ -124,11 +131,87 @@ export default function App() {
   const [trackingOpen, setTrackingOpen] = useState(false);
   const [trackingOrderId, setTrackingOrderId] = useState('');
   const [adminOpen, setAdminOpen] = useState(false);
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
+    return sessionStorage.getItem('mm_admin_auth') === 'true';
+  });
+  const [policyModalOpen, setPolicyModalOpen] = useState(false);
+  const [policyModalTab, setPolicyModalTab] = useState<PolicyTab>('about');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+
+  // Routing State: handles paths /admin/login, /admin/dashboard, or hashes #admin/login, #/admin/login, #admin
+  const getRouteFromLocation = (): string => {
+    const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+    const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
+    
+    if (path === '/admin/login' || hash === 'admin/login' || hash === 'login') {
+      return '/admin/login';
+    }
+    if (path === '/admin/dashboard' || hash === 'admin/dashboard' || hash === 'admin' || path === '/admin') {
+      return '/admin/dashboard';
+    }
+    return '/';
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<string>(getRouteFromLocation);
+  const [routeNotice, setRouteNotice] = useState<string | null>(null);
+
+  const navigateTo = (route: string, notice?: string) => {
+    setRouteNotice(notice || null);
+    setCurrentRoute(route);
+    
+    if (route === '/admin/login') {
+      try {
+        window.history.pushState({ route }, '', '/admin/login');
+      } catch {
+        window.location.hash = '/admin/login';
+      }
+    } else if (route === '/admin/dashboard') {
+      try {
+        window.history.pushState({ route }, '', '/admin/dashboard');
+      } catch {
+        window.location.hash = '/admin/dashboard';
+      }
+    } else {
+      try {
+        window.history.pushState({ route: '/' }, '', '/');
+      } catch {
+        window.location.hash = '';
+      }
+    }
+  };
+
+  // Synchronize route on URL popstate, hash change, and keyboard shortcuts
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const nextRoute = getRouteFromLocation();
+      setCurrentRoute(nextRoute);
+    };
+
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        if (isAdminLoggedIn) {
+          navigateTo('/admin/dashboard');
+        } else {
+          navigateTo('/admin/login');
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isAdminLoggedIn]);
 
   // Promo Code
   const [appliedPromo, setAppliedPromo] = useState<string | null>('MANI15');
-  const [discountRate, setDiscountRate] = useState<number>(0.15); // 15% default discount demo
+  const [discountRate, setDiscountRate] = useState<number>(0.15); // 15% default discount
 
   // Sync to local storage
   useEffect(() => {
@@ -209,9 +292,10 @@ export default function App() {
     return false;
   };
 
-  const handleOpenWhatsAppOrder = (product: Product, size: AgeSize) => {
-    const text = `*Hello Mani Minars Kids Wear!* 👋%0A%0AI would like to order:%0A*Product:* ${encodeURIComponent(product.name)}%0A*Size:* ${encodeURIComponent(size)}%0A*Price:* $${product.price}%0A*Free Shipping Included*%0A%0APlease let me know the estimated delivery and payment options!`;
-    window.open(`https://wa.me/923046466815?text=${text}`, '_blank');
+  const handleOpenWhatsAppOrder = (product: Product, size: AgeSize, color?: string) => {
+    const priceFormatted = `${activeCurrency.symbol}${(product.price * activeCurrency.rate).toFixed(2)}`;
+    const text = `*Hello Mani Minars Kids Wear!* 👋%0A%0AI would like to order directly:%0A*Product:* ${encodeURIComponent(product.name)}%0A*Category:* ${encodeURIComponent(product.categoryLabel)}%0A*Size:* ${encodeURIComponent(size)}${color ? `%0A*Color:* ${encodeURIComponent(color)}` : ''}%0A*Price:* ${encodeURIComponent(priceFormatted)}%0A*Free Shipping Included across Pakistan*%0A%0APlease confirm my order via Cash on Delivery (COD)!`;
+    window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, '_blank');
   };
 
   const handleOrderComplete = (newOrder: Order) => {
@@ -240,8 +324,49 @@ export default function App() {
     );
   };
 
+  const handleUpdateProductStockQuantity = (productId: string, quantity: number) => {
+    setProducts((prev) =>
+      prev.map((p) => (p.id === productId ? { ...p, stockQuantity: quantity, inStock: quantity > 0 } : p))
+    );
+  };
+
   const handleAddNewProduct = (newProduct: Product) => {
     setProducts((prev) => [newProduct, ...prev]);
+  };
+
+  const handleUpdateProduct = (updated: Product) => {
+    setProducts((prev) => prev.map((p) => (p.id === updated.id ? updated : p)));
+  };
+
+  const handleDeleteProduct = (productId: string) => {
+    setProducts((prev) => prev.filter((p) => p.id !== productId));
+    setCartItems((prev) => prev.filter((item) => item.product.id !== productId));
+    setWishlistIds((prev) => prev.filter((id) => id !== productId));
+  };
+
+  const handleResetDefaultCatalog = () => {
+    setProducts(INITIAL_PRODUCTS);
+    localStorage.setItem('mm_products', JSON.stringify(INITIAL_PRODUCTS));
+  };
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdminLoggedIn(true);
+    setAdminOpen(false);
+    navigateTo('/admin/dashboard');
+  };
+
+  const handleAdminLogout = () => {
+    sessionStorage.removeItem('mm_admin_auth');
+    sessionStorage.removeItem('mm_admin_token');
+    sessionStorage.removeItem('mm_admin_email');
+    setIsAdminLoggedIn(false);
+    setAdminOpen(false);
+    navigateTo('/admin/login', 'You have been successfully signed out of the admin session.');
+  };
+
+  const handleOpenPolicyTab = (tab: PolicyTab) => {
+    setPolicyModalTab(tab);
+    setPolicyModalOpen(true);
   };
 
   // Filtered Count for Size Selector Bar
@@ -249,16 +374,125 @@ export default function App() {
     ? products.filter((p) => p.availableSizes.includes(selectedSize)).length
     : products.length;
 
+  // ----------------------------------------------------------------------
+  // Dedicated Full-Page Route Views (/admin/login and /admin/dashboard)
+  // ----------------------------------------------------------------------
+  if (currentRoute === '/admin/login') {
+    if (isAdminLoggedIn) {
+      return (
+        <AdminDashboard
+          isOpen={true}
+          isFullPage={true}
+          onClose={() => navigateTo('/')}
+          onNavigateHome={() => navigateTo('/')}
+          onLogout={handleAdminLogout}
+          products={products}
+          orders={orders}
+          onUpdateOrderStatus={handleUpdateOrderStatus}
+          onToggleProductStock={handleToggleProductStock}
+          onUpdateProductStockQuantity={handleUpdateProductStockQuantity}
+          onAddNewProduct={handleAddNewProduct}
+          onUpdateProduct={handleUpdateProduct}
+          onDeleteProduct={handleDeleteProduct}
+          onResetDefaultCatalog={handleResetDefaultCatalog}
+          currencySymbol={activeCurrency.symbol}
+          currencyRate={activeCurrency.rate}
+        />
+      );
+    }
+
+    return (
+      <AdminLogin
+        isOpen={true}
+        isFullPage={true}
+        onClose={() => navigateTo('/')}
+        onNavigateHome={() => navigateTo('/')}
+        onLoginSuccess={handleAdminLoginSuccess}
+        noticeMessage={routeNotice}
+      />
+    );
+  }
+
+  if (currentRoute === '/admin/dashboard') {
+    if (!isAdminLoggedIn) {
+      // Protected Route: unauthorized users are redirected to login
+      return (
+        <AdminLogin
+          isOpen={true}
+          isFullPage={true}
+          onClose={() => navigateTo('/')}
+          onNavigateHome={() => navigateTo('/')}
+          onLoginSuccess={handleAdminLoginSuccess}
+          noticeMessage="Access restricted. Please sign in with authorized administrator credentials to access the admin dashboard."
+        />
+      );
+    }
+
+    return (
+      <AdminDashboard
+        isOpen={true}
+        isFullPage={true}
+        onClose={() => navigateTo('/')}
+        onNavigateHome={() => navigateTo('/')}
+        onLogout={handleAdminLogout}
+        products={products}
+        orders={orders}
+        onUpdateOrderStatus={handleUpdateOrderStatus}
+        onToggleProductStock={handleToggleProductStock}
+        onUpdateProductStockQuantity={handleUpdateProductStockQuantity}
+        onAddNewProduct={handleAddNewProduct}
+        onUpdateProduct={handleUpdateProduct}
+        onDeleteProduct={handleDeleteProduct}
+        onResetDefaultCatalog={handleResetDefaultCatalog}
+        currencySymbol={activeCurrency.symbol}
+        currencyRate={activeCurrency.rate}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans">
       
+      {/* Admin Session Indicator Bar */}
+      {isAdminLoggedIn && (
+        <div className="bg-blue-950 text-white px-4 py-1.5 flex items-center justify-between text-xs border-b border-blue-900 z-40">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="font-bold flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
+              <span>Admin Mode Active:</span>
+            </span>
+            <span className="text-slate-300 font-mono text-[11px] hidden sm:inline">maniminarskids@gmail.com</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              id="banner-admin-dashboard-btn"
+              onClick={() => navigateTo('/admin/dashboard')}
+              className="text-amber-300 hover:text-amber-200 font-bold flex items-center gap-1 cursor-pointer hover:underline"
+            >
+              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <span>Open Dashboard</span>
+            </button>
+            <span className="text-blue-800">|</span>
+            <button
+              id="banner-admin-logout-btn"
+              onClick={handleAdminLogout}
+              className="text-slate-300 hover:text-white flex items-center gap-1 cursor-pointer hover:underline text-[11px]"
+            >
+              <LogOut className="w-3 h-3" />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 1. Header & Announcement Bar */}
       <Navbar
         cartCount={cartItems.reduce((acc, i) => acc + i.quantity, 0)}
         wishlistCount={wishlistIds.length}
+        isAdminLoggedIn={isAdminLoggedIn}
         onOpenCart={() => setCartOpen(true)}
         onOpenWishlist={() => {
-          // If wishlist clicked, filter by wishlist
           setSelectedCategory('all');
           setSearchQuery('');
           const el = document.getElementById('products-section');
@@ -269,7 +503,10 @@ export default function App() {
           setTrackingOrderId(orders[0]?.id || '');
           setTrackingOpen(true);
         }}
-        onOpenAdmin={() => setAdminOpen(true)}
+        onOpenAdmin={() => navigateTo(isAdminLoggedIn ? '/admin/dashboard' : '/admin/login')}
+        onLogout={handleAdminLogout}
+        onNavigate={navigateTo}
+        onOpenPolicy={handleOpenPolicyTab}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         selectedCategory={selectedCategory}
@@ -283,22 +520,32 @@ export default function App() {
       />
 
       <main className="flex-1">
-        {/* 2. Hero Section with Smiling Children */}
+        {/* 2. Hero Section with Smiling Children wearing trendy clothes */}
         <Hero
+          onShopNow={() => {
+            setSelectedCategory('all');
+            const el = document.getElementById('products-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+          onNewArrivals={() => {
+            setSelectedCategory('new-arrivals');
+            const el = document.getElementById('products-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
           onExploreCollection={() => {
             setSelectedCategory('all');
             const el = document.getElementById('products-section');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}
           onExploreBoys={() => {
-            setSelectedCategory('boys-fashion');
+            setSelectedCategory('new-arrivals');
             const el = document.getElementById('products-section');
             if (el) el.scrollIntoView({ behavior: 'smooth' });
           }}
           onOpenSizeGuide={() => setSizeGuideOpen(true)}
         />
 
-        {/* 3. The 5 Core Promises / Value Props */}
+        {/* 3. Trust Section (Premium Quality Fabric, Skin-Friendly Materials, Fast Delivery, Easy Exchange) */}
         <ValueProps />
 
         {/* 4. Interactive Child Age / Size Selector Bar (1-2Y to 11-12Y) */}
@@ -309,7 +556,24 @@ export default function App() {
           filteredCount={sizeFilteredCount}
         />
 
-        {/* 5. Featured Collections (Denim Cargo Shorts, Cotton Shirts, Boys Fashion, Trendy Outfits) */}
+        {/* 5. Featured Products Sections (New Arrivals, Best Sellers, Denim Collection, Casual Shirts) */}
+        <FeaturedSections
+          products={products}
+          currencySymbol={activeCurrency.symbol}
+          currencyRate={activeCurrency.rate}
+          wishlistIds={wishlistIds}
+          onToggleWishlist={handleToggleWishlist}
+          onQuickView={(p) => setQuickViewProduct(p)}
+          onAddToCart={handleAddToCart}
+          onOpenWhatsAppOrder={handleOpenWhatsAppOrder}
+          onSelectCategory={(cat) => {
+            setSelectedCategory(cat);
+            const el = document.getElementById('products-section');
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+          }}
+        />
+
+        {/* 6. The 6 Requested Category Collections */}
         <FeaturedCollections
           onSelectCategory={(cat) => {
             setSelectedCategory(cat);
@@ -318,7 +582,7 @@ export default function App() {
           }}
         />
 
-        {/* 6. Main Product Grid with Search, Filters & Quick Add to Cart */}
+        {/* 7. Main Product Grid with Search, Filters, Large Images & Direct WhatsApp Ordering */}
         <ProductGrid
           products={products}
           selectedCategory={selectedCategory}
@@ -336,17 +600,20 @@ export default function App() {
           onOpenWhatsAppOrder={handleOpenWhatsAppOrder}
         />
 
-        {/* 7. Customer Reviews Section */}
+        {/* 8. Customer Reviews & Testimonials Section */}
         <CustomerReviews
           reviews={reviews}
           onAddReview={handleAddReview}
         />
 
-        {/* 8. Newsletter Signup with 15% OFF Voucher */}
+        {/* 9. FAQ Section (Placed Below Products & Customer Reviews as requested) */}
+        <FAQSection />
+
+        {/* 10. Newsletter Signup */}
         <Newsletter />
       </main>
 
-      {/* 9. Footer with FAQ & Category Directory */}
+      {/* 9. Footer with FAQ, Categories, & Legal Policy Links */}
       <Footer
         onSelectCategory={(cat) => {
           setSelectedCategory(cat);
@@ -363,12 +630,16 @@ export default function App() {
           setTrackingOrderId(orders[0]?.id || '');
           setTrackingOpen(true);
         }}
+        onOpenPolicy={handleOpenPolicyTab}
+        onOpenAdmin={() => navigateTo(isAdminLoggedIn ? '/admin/dashboard' : '/admin/login')}
+        isAdminLoggedIn={isAdminLoggedIn}
+        onNavigate={navigateTo}
       />
 
       {/* Floating WhatsApp Action Button */}
       <WhatsAppFloatingButton />
 
-      {/* Modals & Drawers */}
+      {/* Modals & Overlays */}
       <ProductQuickView
         product={quickViewProduct}
         onClose={() => setQuickViewProduct(null)}
@@ -428,16 +699,47 @@ export default function App() {
         currencyRate={activeCurrency.rate}
       />
 
-      <AdminDashboard
-        isOpen={adminOpen}
-        onClose={() => setAdminOpen(false)}
-        products={products}
-        orders={orders}
-        onUpdateOrderStatus={handleUpdateOrderStatus}
-        onToggleProductStock={handleToggleProductStock}
-        onAddNewProduct={handleAddNewProduct}
-        currencySymbol={activeCurrency.symbol}
-        currencyRate={activeCurrency.rate}
+      {/* Secure Admin Authentication Gate */}
+      {adminOpen && !isAdminLoggedIn && (
+        <AdminLogin
+          isOpen={adminOpen}
+          onClose={() => setAdminOpen(false)}
+          onNavigateHome={() => {
+            setAdminOpen(false);
+            navigateTo('/');
+          }}
+          onLoginSuccess={handleAdminLoginSuccess}
+        />
+      )}
+
+      {/* Full Admin Management Dashboard (Authenticated Only) */}
+      {adminOpen && isAdminLoggedIn && (
+        <AdminDashboard
+          isOpen={adminOpen}
+          onClose={() => setAdminOpen(false)}
+          onNavigateHome={() => {
+            setAdminOpen(false);
+            navigateTo('/');
+          }}
+          onLogout={handleAdminLogout}
+          products={products}
+          orders={orders}
+          onUpdateOrderStatus={handleUpdateOrderStatus}
+          onToggleProductStock={handleToggleProductStock}
+          onUpdateProductStockQuantity={handleUpdateProductStockQuantity}
+          onAddNewProduct={handleAddNewProduct}
+          onUpdateProduct={handleUpdateProduct}
+          onDeleteProduct={handleDeleteProduct}
+          onResetDefaultCatalog={handleResetDefaultCatalog}
+          currencySymbol={activeCurrency.symbol}
+          currencyRate={activeCurrency.rate}
+        />
+      )}
+
+      <PolicyModal
+        isOpen={policyModalOpen}
+        onClose={() => setPolicyModalOpen(false)}
+        initialTab={policyModalTab}
       />
 
     </div>

@@ -1,160 +1,202 @@
 import React from 'react';
-import { Sparkles, ArrowRight, ShieldCheck, Heart, Truck, CheckCircle2, MessageCircle } from 'lucide-react';
+import { Sparkles, ArrowRight, ShieldCheck, Heart, Truck, CheckCircle2, MessageCircle, Star, Users } from 'lucide-react';
+import { WHATSAPP_NUMBER } from '../types';
 
 interface HeroProps {
-  onExploreCollection: () => void;
-  onExploreBoys: () => void;
+  onExploreCollection?: () => void;
+  onShopNow?: () => void;
+  onExploreBoys?: () => void;
+  onNewArrivals?: () => void;
   onOpenSizeGuide: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
   onExploreCollection,
+  onShopNow,
   onExploreBoys,
+  onNewArrivals,
   onOpenSizeGuide,
 }) => {
-  return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-blue-50/70 via-white to-white border-b border-slate-100">
-      {/* Decorative subtle background elements */}
-      <div className="absolute top-10 right-5 w-72 h-72 bg-red-100/40 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-5 w-96 h-96 bg-blue-100/50 rounded-full blur-3xl pointer-events-none" />
+  const handleShopNow = onShopNow || onExploreCollection || (() => {});
+  const handleNewArrivals = onNewArrivals || onExploreBoys || (() => {});
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 lg:py-20 relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+  return (
+    <section className="relative w-full overflow-hidden bg-slate-950 text-white">
+      {/* Editorial background elements with high-end ambient glow */}
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/95 to-blue-950/80 pointer-events-none z-10" />
+      <div className="absolute top-0 right-0 w-full lg:w-3/5 h-full opacity-30 lg:opacity-45 pointer-events-none">
+        <img
+          src="https://images.unsplash.com/photo-1519764622345-23439dd774f7?auto=format&fit=crop&w=1800&q=85"
+          alt="Happy fashionable children smiling in stylish clothing by Mani Minars Kids Wear"
+          className="w-full h-full object-cover object-center"
+          loading="eager"
+          decoding="async"
+          referrerPolicy="no-referrer"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-20 lg:py-24 relative z-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
           
-          {/* Left Hero Column */}
+          {/* Left Hero Content */}
           <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
             {/* Top pill badge */}
-            <div className="inline-flex items-center gap-2 bg-white border border-blue-200/80 shadow-xs px-3.5 py-1.5 rounded-full text-xs font-semibold text-blue-900 mx-auto lg:mx-0">
-              <span className="flex h-2 w-2 rounded-full bg-red-600 animate-ping" />
-              <span className="text-red-600 font-bold uppercase tracking-wider text-[11px]">New 2026 Collection</span>
-              <span className="text-slate-300">|</span>
-              <span>Available in 1 to 12 Years</span>
+            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-1.5 rounded-full text-xs font-semibold text-white mx-auto lg:mx-0 shadow-sm">
+              <span className="flex h-2 w-2 rounded-full bg-red-500 animate-ping" />
+              <span className="text-red-400 font-black uppercase tracking-wider text-[11px]">New 2026 Collection</span>
+              <span className="text-slate-500">|</span>
+              <span className="text-amber-300 font-bold">15% OFF Code: MANI15</span>
             </div>
 
             {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-blue-950 tracking-tight leading-[1.12] font-display">
-              Comfortable & Stylish <span className="text-red-600">Kids Wear</span> Designed for Everyday Adventures.
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] font-display">
+              Premium Kids Fashion for <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-400 via-rose-300 to-amber-300">Every Adventure</span>
             </h1>
 
-            {/* Subtitle */}
-            <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Crafted from cloud-soft breathable cottons with flexible elastic waistbands, reinforced stitching, and play-proof durability made to keep up with your active growing kids.
+            {/* Subheading */}
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+              Stylish, Comfortable & Affordable Clothing for Boys and Girls aged 1 to 12 Years. Crafted with 100% skin-safe combed cotton, stretch flex denim, and pinch-free elastic waistbands.
             </p>
 
-            {/* The 5 Key Value Points from Prompt */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 max-w-xl mx-auto lg:mx-0 text-left">
+            {/* Key trust badges pill row */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5 pt-1">
               {[
-                'Premium Quality Fabric (100% Combed Cotton)',
-                'Soft and Skin-Friendly (Zero Itch)',
-                'Durable Reinforced Stitching',
-                'Trendy Modern Design & Vibrant Dyes',
-                'Perfect Fit for Growing Kids (Elastic Waist)',
-              ].map((benefit, idx) => (
-                <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-800">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>{benefit}</span>
-                </div>
+                'Free Nationwide Shipping',
+                '100% Skin Friendly Fabric',
+                'Pinch-Free Elastic Waistbands',
+                '14-Day Doorstep Exchange'
+              ].map((pill, idx) => (
+                <span key={idx} className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-200 bg-white/5 border border-white/10 px-3 py-1 rounded-lg">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                  {pill}
+                </span>
               ))}
             </div>
 
-            {/* CTAs and WhatsApp Action */}
+            {/* The Two Requested CTA Buttons: "Shop Now" and "New Arrivals" */}
             <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4">
               <button
-                onClick={onExploreCollection}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 sm:px-8 py-3.5 rounded-xl shadow-md hover:shadow-lg transition-all flex items-center gap-2 group text-sm sm:text-base active:scale-95 cursor-pointer"
+                onClick={handleShopNow}
+                id="hero-shop-now-btn"
+                className="bg-red-600 hover:bg-red-700 text-white font-extrabold px-8 py-4 rounded-xl shadow-lg hover:shadow-red-600/30 transition-all flex items-center gap-2.5 group text-sm sm:text-base active:scale-95 cursor-pointer"
               >
-                <span>Shop New Collection</span>
+                <span>Shop Now</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
               <button
-                onClick={onExploreBoys}
-                className="bg-blue-900 hover:bg-blue-950 text-white font-semibold px-6 py-3.5 rounded-xl shadow-xs transition-all text-sm sm:text-base active:scale-95 cursor-pointer"
+                onClick={handleNewArrivals}
+                id="hero-new-arrivals-btn"
+                className="bg-white/10 hover:bg-white/20 border border-white/25 text-white font-extrabold px-8 py-4 rounded-xl shadow-sm transition-all text-sm sm:text-base active:scale-95 cursor-pointer backdrop-blur-xs flex items-center gap-2"
               >
-                Explore Boys Fashion
+                <Sparkles className="w-4 h-4 text-amber-300" />
+                <span>New Arrivals</span>
               </button>
 
               <a
-                href="https://wa.me/923046466815?text=Hello%20Mani%20Minars!%20I'd%20like%20help%20picking%20the%20best%20outfit%20for%20my%20child."
+                href={`https://wa.me/${WHATSAPP_NUMBER}?text=Hello%20Mani%20Minars!%20I'd%20like%20to%20browse%20and%20order%20the%20latest%20kids%20fashion%20collection.`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-semibold px-4 py-3.5 rounded-xl text-sm transition-colors"
+                className="inline-flex items-center gap-2 bg-emerald-600/90 hover:bg-emerald-600 text-white font-bold px-5 py-4 rounded-xl text-sm transition-all active:scale-95 border border-emerald-500/50 shadow-md"
               >
-                <MessageCircle className="w-4 h-4 text-emerald-600" />
+                <MessageCircle className="w-4 h-4" />
                 <span>WhatsApp Order</span>
               </a>
             </div>
 
-            {/* Trust Footer line */}
-            <div className="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-4 text-xs text-slate-500 font-medium">
-              <span className="flex items-center gap-1.5 text-slate-700">
-                <Truck className="w-4 h-4 text-red-600" />
-                <strong>Free Shipping</strong> on All Orders
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1.5 text-slate-700">
-                <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-                <strong>1,200+ Verified</strong> Parent Reviews
-              </span>
-              <span>•</span>
-              <button 
-                onClick={onOpenSizeGuide}
-                className="underline hover:text-blue-800 text-blue-700 font-semibold"
-              >
-                Find Child's Size (1-12Y)
-              </button>
+            {/* High-Converting Social Proof Strip */}
+            <div className="pt-4 flex flex-wrap items-center justify-center lg:justify-start gap-6 text-xs text-slate-300">
+              <div className="flex items-center gap-2">
+                <div className="flex -space-x-2">
+                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Parent reviewer" />
+                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Parent reviewer" />
+                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Parent reviewer" />
+                  <img className="inline-block h-8 w-8 rounded-full ring-2 ring-slate-900 object-cover" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=100&q=80" alt="Parent reviewer" />
+                </div>
+                <div className="text-left">
+                  <div className="flex items-center gap-1 text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-3 h-3 fill-amber-400" />
+                    ))}
+                    <span className="font-bold text-white text-xs ml-0.5">4.9/5</span>
+                  </div>
+                  <p className="text-[11px] text-slate-400">10,000+ Happy Pakistani Parents</p>
+                </div>
+              </div>
+
+              <div className="h-6 w-px bg-slate-800 hidden sm:block" />
+
+              <div className="flex items-center gap-4 text-xs font-semibold text-slate-300">
+                <span className="flex items-center gap-1 text-slate-200">
+                  <Truck className="w-4 h-4 text-red-400" />
+                  <span>Free Delivery & COD</span>
+                </span>
+                <button 
+                  onClick={onOpenSizeGuide}
+                  className="underline hover:text-white text-slate-300 font-semibold cursor-pointer"
+                >
+                  Size Guide (1-12Y)
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Right Visual Image Showcase with Smiling Children & Real Products */}
+          {/* Right Visual Showcase with Genuine Kids Fashion Imagery */}
           <div className="lg:col-span-5 relative">
             <div className="relative mx-auto max-w-md lg:max-w-none">
               
-              {/* Main Lifestyle Hero Photo - Happy kids smiling in stylish casual wear */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-100 aspect-4/5 group">
+              {/* Main Lifestyle Hero Photo - Kids wearing trendy kids fashion */}
+              <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-slate-900 aspect-4/5 group">
                 <img
-                  src="https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85"
-                  alt="Smiling children dressed in comfortable and stylish kids wear by Mani Minars"
-                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
+                  src="https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1000&q=85"
+                  alt="Stylish fashionable children wearing modern comfortable clothes by Mani Minars Kids Wear"
+                  className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
                   loading="eager"
+                  decoding="async"
                 />
 
-                {/* Gradient overlay at bottom of photo */}
-                <div className="absolute inset-0 bg-gradient-to-t from-blue-950/80 via-blue-950/20 to-transparent" />
+                {/* Vignette Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
 
-                {/* In-photo Tag overlay */}
+                {/* Floating Bottom Card on Image */}
                 <div className="absolute bottom-5 left-5 right-5 text-white">
-                  <div className="inline-block bg-red-600 text-white text-[11px] font-extrabold uppercase px-2.5 py-0.5 rounded-sm tracking-wide mb-1">
-                    Signature Favorite
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span className="inline-block bg-red-600 text-white text-[10px] font-extrabold uppercase px-2.5 py-0.5 rounded-sm tracking-wider">
+                      Trending Now
+                    </span>
+                    <span className="inline-block bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-sm">
+                      Ages 1-12 Years
+                    </span>
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold font-display leading-snug text-white drop-shadow-sm">
-                    Denim Cargo Shorts with Elastic Waistband
+                  <h3 className="text-lg sm:text-xl font-black font-display leading-tight text-white">
+                    Premium Casual Shirts & Stretch Denim Shorts
                   </h3>
-                  <p className="text-xs text-blue-100 mt-0.5">
-                    100% Stretch cotton • No-pinch ribbing • All sizes 1-12 Years
+                  <p className="text-xs text-slate-300 mt-1">
+                    Reinforced stitching • Anti-pinch elastic waistband • 100% Breathable
                   </p>
                 </div>
               </div>
 
-              {/* Floating Badge 1: Soft & Skin Friendly */}
-              <div className="absolute -top-4 -left-4 sm:-left-6 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3 backdrop-blur-xs">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-800 shrink-0 font-bold">
+              {/* Floating Badge: Soft & Skin Friendly */}
+              <div className="absolute -top-4 -left-3 sm:-left-5 bg-white text-slate-900 p-3 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-900 shrink-0 font-bold text-lg">
                   ☁️
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900">Soft & Skin-Friendly</div>
-                  <div className="text-[11px] text-slate-500 font-medium">100% Pure Organic Cotton</div>
+                  <div className="text-xs font-bold text-slate-900">Skin-Friendly Cotton</div>
+                  <div className="text-[10px] text-slate-500 font-medium">Hypoallergenic & Soft</div>
                 </div>
               </div>
 
-              {/* Floating Badge 2: Elastic Waistband Comfort */}
-              <div className="absolute -bottom-4 -right-2 sm:-right-4 bg-white p-3 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-600 shrink-0 font-bold">
+              {/* Floating Badge: Elastic Waistband Comfort */}
+              <div className="absolute -bottom-4 -right-3 sm:-right-4 bg-white text-slate-900 p-3 rounded-2xl shadow-xl border border-slate-100 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-600 shrink-0 font-bold text-lg">
                   ✨
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-900">Elastic Waistband</div>
-                  <div className="text-[11px] text-emerald-600 font-bold">Room for Growing Kids</div>
+                  <div className="text-xs font-bold text-slate-900">Room-to-Grow Fit</div>
+                  <div className="text-[10px] text-red-600 font-bold">Elastic Stretch Waist</div>
                 </div>
               </div>
 
@@ -163,6 +205,6 @@ export const Hero: React.FC<HeroProps> = ({
 
         </div>
       </div>
-    </div>
+    </section>
   );
 };

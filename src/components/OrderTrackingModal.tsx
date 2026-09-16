@@ -65,10 +65,12 @@ export const OrderTrackingModal: React.FC<OrderTrackingModalProps> = ({
 
   const getStepStatus = (stepKey: string, currentStatus: string) => {
     const orderRanks: Record<string, number> = {
+      pending: 0,
       confirmed: 1,
       packed: 2,
       shipped: 3,
       delivered: 4,
+      cancelled: -1,
     };
     const currentRank = orderRanks[currentStatus] || 1;
     const stepRank = orderRanks[stepKey] || 1;

@@ -4,18 +4,18 @@ export const INITIAL_PRODUCTS: Product[] = [
   {
     id: 'mm-01',
     name: 'Kids Denim Cargo Shorts with Elastic Waistband',
-    category: 'denim-cargo',
-    categoryLabel: 'Denim Cargo Shorts',
+    category: 'denim-collection',
+    categoryLabel: 'Denim Collection',
     price: 24.99,
     originalPrice: 32.99,
     rating: 4.9,
     reviewCount: 148,
     images: [
-      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'Engineered for playground agility and weekend outings! Features a super soft, stretch-infused denim fabric with a ribbed elastic waistband and functional drawstrings that easily adapt to your growing child.',
+    description: 'Engineered for playground agility and weekend adventures! Features super-soft stretch-infused denim fabric with a soft ribbed elastic waistband and functional drawstrings that easily adapt to your growing child.',
     highlights: [
       'Comfort-stretch elastic waistband with soft interior lining',
       'Dual utility cargo flap pockets with secure closures',
@@ -28,27 +28,30 @@ export const INITIAL_PRODUCTS: Product[] = [
     colors: [
       { name: 'Vintage Blue', hex: '#3B82F6' },
       { name: 'Washed Navy', hex: '#1E3A8A' },
-      { name: 'Faded Black', hex: '#374151' }
+      { name: 'Faded Slate', hex: '#374151' }
     ],
     isNewArrival: false,
     isBestSeller: true,
+    isTrending: true,
     inStock: true,
-    elasticWaistband: true
+    stockQuantity: 45,
+    elasticWaistband: true,
+    gender: 'unisex'
   },
   {
     id: 'mm-02',
     name: 'Breezy Kids Casual Cotton Shirt',
-    category: 'cotton-shirts',
-    categoryLabel: 'Casual Cotton Shirts',
+    category: 'casual-wear',
+    categoryLabel: 'Casual Wear',
     price: 21.99,
     originalPrice: 28.00,
     rating: 4.8,
     reviewCount: 92,
     images: [
-      'https://images.unsplash.com/photo-1503944547468-b65924483ce8?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1471286174890-9c112ffca56a?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'Lightweight, ultra-breathable casual cotton shirt tailored with playful detailing. Ideal for warm sunny days, school events, or birthday parties. Pre-shrunk pure cotton ensures zero itching.',
+    description: 'Lightweight, ultra-breathable casual cotton shirt tailored with playful detailing. Ideal for warm sunny days, school outings, or family celebrations. Pre-shrunk pure cotton ensures zero skin itching.',
     highlights: [
       '100% Breathable Combed Cotton',
       'Smooth pearlized buttons with pinch-safe button placket',
@@ -60,208 +63,470 @@ export const INITIAL_PRODUCTS: Product[] = [
     availableSizes: [...ALL_SIZES],
     colors: [
       { name: 'Sky Blue', hex: '#60A5FA' },
-      { name: 'Crisp White', hex: '#F3F4F6' },
-      { name: 'Coral Red', hex: '#EF4444' }
+      { name: 'Crisp White', hex: '#F9FAFB' },
+      { name: 'Sunset Coral', hex: '#F87171' }
     ],
-    isNewArrival: true,
+    isNewArrival: false,
     isBestSeller: true,
+    isCasualShirt: true,
     inStock: true,
-    elasticWaistband: false
+    stockQuantity: 32,
+    elasticWaistband: false,
+    gender: 'boys'
   },
   {
     id: 'mm-03',
     name: 'Boys Urban Chino & Pique Polo Fashion Set',
-    category: 'boys-fashion',
-    categoryLabel: 'Boys Fashion Wear',
-    price: 36.99,
-    originalPrice: 48.00,
-    rating: 5.0,
-    reviewCount: 114,
-    images: [
-      'https://images.unsplash.com/photo-1471286174890-9c112ffca56a?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=800&q=80'
-    ],
-    description: 'A sharp, stylish 2-piece modern ensemble featuring a tipped pique polo and stretch-cotton twill chinos. Designed with an adjustable inner button waistband so your boy can stay comfortable all day.',
-    highlights: [
-      'Pre-matched coordinated look for effortless morning dressing',
-      'Internal button-hole elastic waistband adjusts up to 2 inches',
-      'High-density embroidery crest on chest',
-      'Twill chinos with deep side pockets'
-    ],
-    fabric: 'Top: 100% Pique Cotton | Bottom: 97% Cotton, 3% Elastane',
-    careInstructions: 'Wash before wear. Cold water wash, gentle cycle.',
-    availableSizes: [...ALL_SIZES],
-    colors: [
-      { name: 'Navy & Khaki', hex: '#1E3A8A' },
-      { name: 'Crimson & Olive', hex: '#DC2626' }
-    ],
-    isNewArrival: true,
-    isBestSeller: false,
-    inStock: true,
-    elasticWaistband: true
-  },
-  {
-    id: 'mm-04',
-    name: 'Trendy Children Safari Adventure Outfit',
-    category: 'trendy-outfits',
-    categoryLabel: "Trendy Children's Outfits",
-    price: 34.50,
+    category: 'boys-collection',
+    categoryLabel: 'Boys Collection',
+    price: 34.99,
     originalPrice: 45.00,
     rating: 4.9,
-    reviewCount: 88,
+    reviewCount: 116,
     images: [
-      'https://images.unsplash.com/photo-1514315384763-ba401779410f?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1560506840-ec148e82a604?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'Get ready for unforgettable play dates! This trendy coordinate set features a camp collar safari shirt and matching drawstring shorts crafted from soft woven cotton that holds up through every outdoor exploration.',
+    description: 'Sharp, versatile 2-piece coordination set for smart boys. Combines a breathable honeycomb cotton pique polo shirt with tailored stretch chinos equipped with an internal adjustable waistband.',
     highlights: [
-      'Matching two-piece explorer set with contrast buttons',
-      'Elasticized waistband with functional braided drawcord',
-      'Twin front chest utility pockets',
-      'Vibrant colorfast dyes that never fade in the wash'
+      'Hidden interior elastic button-hole waist adjuster',
+      'Reinforced bar-tack pocket corners for heavy play',
+      'Breathable pique knit retains vibrant color after 50+ washes',
+      'Double-ply reinforced knee panels'
     ],
-    fabric: '100% Soft Touch Washed Cotton',
+    fabric: 'Polo: 100% Pique Cotton | Chinos: 97% Cotton Twill, 3% Elastane',
     careInstructions: 'Machine wash warm, tumble dry medium.',
     availableSizes: [...ALL_SIZES],
     colors: [
-      { name: 'Sand Khaki', hex: '#D97706' },
-      { name: 'Sage Green', hex: '#059669' },
-      { name: 'Ocean Navy', hex: '#1D4ED8' }
+      { name: 'Navy & Khaki', hex: '#1E3A8A' },
+      { name: 'Burgundy & Olive', hex: '#831843' },
+      { name: 'Royal Blue & Stone', hex: '#1D4ED8' }
+    ],
+    isNewArrival: false,
+    isBestSeller: true,
+    inStock: true,
+    stockQuantity: 18,
+    elasticWaistband: true,
+    gender: 'boys'
+  },
+  {
+    id: 'mm-04',
+    name: 'Girls Floral Meadow Tiered Cotton Dress',
+    category: 'girls-collection',
+    categoryLabel: 'Girls Collection',
+    price: 28.99,
+    originalPrice: 38.00,
+    rating: 4.9,
+    reviewCount: 88,
+    images: [
+      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'A charming, twirl-ready tiered cotton dress adorned with gentle hand-drawn botanical blossoms. Crafted from gossamer-soft pure cotton with an elasticated smocked bodice for effortless all-day comfort.',
+    highlights: [
+      'Ultra-soft smocked elastic chest that grows with your girl',
+      'Lined with 100% skin-safe breathable voile',
+      'Delicate flutter cap sleeves with zero tight armholes',
+      'Fade-resistant hypoallergenic organic dyes'
+    ],
+    fabric: '100% Premium Cotton Voile with Soft Cotton Lining',
+    careInstructions: 'Machine wash delicate cycle in cold water. Hang to dry.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Blush Rose', hex: '#FB7185' },
+      { name: 'Buttercup Yellow', hex: '#FDE047' },
+      { name: 'Mint Meadow', hex: '#6EE7B7' }
     ],
     isNewArrival: true,
     isBestSeller: true,
+    isTrending: true,
     inStock: true,
-    elasticWaistband: true
+    stockQuantity: 24,
+    elasticWaistband: true,
+    gender: 'girls'
   },
   {
     id: 'mm-05',
-    name: 'Rugged Ripstop Kids Cargo Shorts with Stretch Waist',
-    category: 'denim-cargo',
-    categoryLabel: 'Denim Cargo Shorts',
-    price: 22.99,
-    originalPrice: 29.99,
+    name: 'Summer Safari Camp Collar 2-Piece Set',
+    category: 'new-arrivals',
+    categoryLabel: 'New Arrivals',
+    price: 29.99,
+    originalPrice: 39.00,
     rating: 4.8,
-    reviewCount: 76,
+    reviewCount: 64,
     images: [
-      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1514315384763-ba401779410f?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'Built for tree climbing, running, and spontaneous weekend adventures. Fitted with a soft ribbed waistband that prevents digging or red marks on sensitive skin.',
+    description: 'Fresh for the 2026 season! Cuban camp-collar safari shirt matched with elastic drawcord adventure shorts. Effortless summer dressing made from natural cotton linen weave.',
     highlights: [
-      'Reinforced bar-tack stitching on all 6 pockets',
-      'Full elastic waistband with inner stretch panel',
-      'Easy pull-on design for independent toddler & child dressing',
-      'Fade-resistant color finish'
+      'Relaxed vacation fit keeps active kids cool in heat',
+      '360° elastic comfort waistband with woven drawstring',
+      'Deep side pockets for playground discoveries',
+      'Lightweight, crease-friendly relaxed texture'
     ],
-    fabric: '98% Cotton Canvas, 2% Elastane',
-    careInstructions: 'Machine wash cold, do not dry clean.',
+    fabric: '65% Organic Cotton, 35% Pure Linen',
+    careInstructions: 'Machine wash cold on gentle cycle, warm iron.',
     availableSizes: [...ALL_SIZES],
     colors: [
-      { name: 'Desert Camel', hex: '#B45309' },
-      { name: 'Classic Indigo', hex: '#1E40AF' },
-      { name: 'Charcoal', hex: '#4B5563' }
+      { name: 'Safari Beige', hex: '#D1D5DB' },
+      { name: 'Terracotta Rust', hex: '#B91C1C' },
+      { name: 'Ocean Navy', hex: '#1E3A8A' }
+    ],
+    isNewArrival: true,
+    isBestSeller: false,
+    isTrending: true,
+    inStock: true,
+    stockQuantity: 35,
+    elasticWaistband: true,
+    gender: 'unisex'
+  },
+  {
+    id: 'mm-06',
+    name: 'Junior Dapper Blazer & Tailored Trouser Party Set',
+    category: 'party-wear',
+    categoryLabel: 'Party Wear',
+    price: 44.99,
+    originalPrice: 58.00,
+    rating: 5.0,
+    reviewCount: 42,
+    images: [
+      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519764622345-23439dd774f7?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'Exceptional celebration attire for weddings, Eid, and birthday banquets. A softly structured lightweight blazer accompanied by smart stretch trousers with an elastic back panel for dinner comfort.',
+    highlights: [
+      'Concealed elastic waist panel prevents tight belly pinching',
+      'Breathable satin-smooth inner lining for smooth layering',
+      'Includes detachable silk-touch pocket square',
+      'Crease-resistant luxury cotton blend'
+    ],
+    fabric: '80% Combed Cotton, 20% Polyester Luxury Weave',
+    careInstructions: 'Dry clean recommended or gentle hand wash cold.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Midnight Navy', hex: '#0F172A' },
+      { name: 'Charcoal Grey', hex: '#334155' },
+      { name: 'Royal Crimson', hex: '#991B1B' }
+    ],
+    isNewArrival: true,
+    isBestSeller: false,
+    inStock: true,
+    stockQuantity: 4, // Low stock for alerts
+    elasticWaistband: true,
+    gender: 'boys'
+  },
+  {
+    id: 'mm-07',
+    name: 'Girls Starlight Shimmer Party Dress',
+    category: 'party-wear',
+    categoryLabel: 'Party Wear',
+    price: 36.99,
+    originalPrice: 48.00,
+    rating: 4.9,
+    reviewCount: 75,
+    images: [
+      'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'Festive dreams come true! Multi-layered soft tulle skirt over 100% skin-safe cotton lining with delicate shimmer detailing. No itchy metallic threads touch your child’s body.',
+    highlights: [
+      'Zero-itch guarantee with 100% pure cotton body lining',
+      'Flexible elasticated back waist for all-day party play',
+      'Hidden smooth back zipper with protective fabric flap',
+      'High-density sparkle that will not shed in the wash'
+    ],
+    fabric: 'Shell: Fine Sparkle Tulle | Lining: 100% Breathable Cotton',
+    careInstructions: 'Hand wash cold inside out, hang to dry.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Starlight Silver', hex: '#E2E8F0' },
+      { name: 'Princess Ruby', hex: '#E11D48' },
+      { name: 'Sapphire Navy', hex: '#1E3A8A' }
     ],
     isNewArrival: false,
     isBestSeller: true,
     inStock: true,
-    elasticWaistband: true
+    stockQuantity: 15,
+    elasticWaistband: true,
+    gender: 'girls'
   },
   {
-    id: 'mm-06',
-    name: 'Boys Oxford Button-Down Casual Shirt',
-    category: 'cotton-shirts',
-    categoryLabel: 'Casual Cotton Shirts',
-    price: 23.50,
-    originalPrice: 30.00,
-    rating: 4.7,
-    reviewCount: 65,
-    images: [
-      'https://images.unsplash.com/photo-1471286174890-9c112ffca56a?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1503944547468-b65924483ce8?auto=format&fit=crop&w=800&q=80'
-    ],
-    description: 'A timeless wardrobe essential with a relaxed fit. Soft-washed Oxford cotton feels smooth right out of the box, perfect for family dinners or smart casual days.',
-    highlights: [
-      'Garment-washed for ultra-soft hand feel',
-      'Button-down collar stays neat all day',
-      'Chest patch pocket with Mani Minars signature embroidered tab',
-      'Shirttail hem looks great tucked or untucked'
-    ],
-    fabric: '100% Premium Long-Staple Cotton',
-    careInstructions: 'Machine wash warm, tumble dry low.',
-    availableSizes: [...ALL_SIZES],
-    colors: [
-      { name: 'Nautical Navy', hex: '#1E3A8A' },
-      { name: 'Candy Pink', hex: '#F43F5E' },
-      { name: 'Classic Blue Stripe', hex: '#3B82F6' }
-    ],
-    isNewArrival: false,
-    isBestSeller: false,
-    inStock: true,
-    elasticWaistband: false
-  },
-  {
-    id: 'mm-07',
+    id: 'mm-08',
     name: 'Boys Varsity Bomber & Jogger Fashion Set',
-    category: 'boys-fashion',
-    categoryLabel: 'Boys Fashion Wear',
+    category: 'boys-collection',
+    categoryLabel: 'Boys Collection',
     price: 39.99,
     originalPrice: 52.00,
     rating: 4.9,
     reviewCount: 103,
     images: [
-      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1514315384763-ba401779410f?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1503919545889-aef636e10ad4?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1514315384763-ba401779410f?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'High-energy streetwear look for cool kids. Includes a snap-button varsity lightweight bomber jacket paired with tapered French terry joggers with flexible ribbed cuffs.',
+    description: 'High-energy streetwear look for active young boys. Includes an easy snap-button varsity jacket paired with tapered French terry joggers featuring flexible ribbed elastic cuffs.',
     highlights: [
-      'Soft brushed French terry cotton interior',
-      'Snap front closure made easy for little hands',
+      'Soft brushed French terry cotton interior for cozy warmth',
+      'Snap front closure engineered easy for small hands',
       'Deep zipper side pockets to keep treasures safe',
-      'Reinforced knee panels prevent worn-out holes'
+      'Reinforced knee panels prevent playground holes'
     ],
-    fabric: '85% Cotton, 15% Polyester Poly-Cotton Fleece',
-    careInstructions: 'Machine wash cold with like colors. Do not iron prints.',
+    fabric: '85% Cotton, 15% Poly Fleece',
+    careInstructions: 'Machine wash cold with like colors.',
     availableSizes: [...ALL_SIZES],
     colors: [
       { name: 'Navy & Crimson', hex: '#1E3A8A' },
-      { name: 'Heather Grey', hex: '#9CA3AF' }
+      { name: 'Heather Grey & Black', hex: '#64748B' }
     ],
     isNewArrival: true,
     isBestSeller: true,
     inStock: true,
-    elasticWaistband: true
+    stockQuantity: 3, // Low stock alert!
+    elasticWaistband: true,
+    gender: 'boys'
   },
   {
-    id: 'mm-08',
-    name: 'Trendy Sunny Day Linen-Blend Playwear Outfit',
-    category: 'trendy-outfits',
-    categoryLabel: "Trendy Children's Outfits",
-    price: 29.99,
-    originalPrice: 38.00,
-    rating: 4.8,
-    reviewCount: 54,
+    id: 'mm-09',
+    name: 'Kids Washed Denim Adventure Jacket',
+    category: 'denim-collection',
+    categoryLabel: 'Denim Collection',
+    price: 32.99,
+    originalPrice: 42.00,
+    rating: 4.9,
+    reviewCount: 68,
     images: [
-      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=800&q=80',
-      'https://images.unsplash.com/photo-1503944547468-b65924483ce8?auto=format&fit=crop&w=800&q=80'
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1000&q=85'
     ],
-    description: 'Breathable, relaxed summer coordination set with a Cuban camp collar shirt and matching tailored shorts with an expandable waistband.',
+    description: 'The iconic childhood jacket reimagined for supreme comfort. Made from vintage stonewashed flexible denim with soft stretch knit side inserts for full playground mobility.',
     highlights: [
-      'Linen-cotton blend keeps kids cool in hot weather',
-      'Full elastic back waistband ensures custom flexible fit',
-      'Coconut wood buttons add premium boutique charm',
-      'Machine washable and becomes softer after every wash'
+      'Pre-softened washed cotton denim with zero stiffness',
+      'Signature Mani Minars brass-tone snap buttons',
+      'Inner chest patch pocket for personal belongings',
+      'Double-stitched durable stress points'
     ],
-    fabric: '60% Organic Cotton, 40% Natural Linen',
-    careInstructions: 'Machine wash cold on gentle cycle, line dry in shade.',
+    fabric: '99% Combed Cotton, 1% Spandex Denim',
+    careInstructions: 'Machine wash cold with similar dark colors.',
     availableSizes: [...ALL_SIZES],
     colors: [
-      { name: 'Natural Sand', hex: '#E5E7EB' },
-      { name: 'Terracotta Red', hex: '#B91C1C' },
-      { name: 'Coastal Blue', hex: '#2563EB' }
+      { name: 'Classic Blue Wash', hex: '#2563EB' },
+      { name: 'Deep Indigo', hex: '#1E3A8A' }
+    ],
+    isNewArrival: false,
+    isBestSeller: true,
+    inStock: true,
+    stockQuantity: 22,
+    elasticWaistband: false,
+    gender: 'unisex'
+  },
+  {
+    id: 'mm-10',
+    name: 'Girls Pastel Ribbed Top & Culottes Play Set',
+    category: 'girls-collection',
+    categoryLabel: 'Girls Collection',
+    price: 26.99,
+    originalPrice: 35.00,
+    rating: 4.8,
+    reviewCount: 52,
+    images: [
+      'https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1502086223501-7ea6ecd79368?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'A stylish 2-piece everyday set. Featuring a lettuce-edge ribbed baby-tee and wide-leg airy culottes with an expandable elastic waistband and matching cloth belt.',
+    highlights: [
+      'Super-stretchy cloud-soft ribbed modal cotton blend',
+      'Extra-wide gentle waistband leaves no red marks',
+      'Wide-leg silhouette allows free running and jumping',
+      'Resistant to pilling even after frequent cycles'
+    ],
+    fabric: '95% Organic Cotton, 5% Elastane Ribbed Knit',
+    careInstructions: 'Machine wash cold delicate, line dry.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Lilac Mist', hex: '#C084FC' },
+      { name: 'Sage Green', hex: '#86EFAC' },
+      { name: 'Warm Peach', hex: '#FDBA74' }
     ],
     isNewArrival: true,
     isBestSeller: false,
     inStock: true,
-    elasticWaistband: true
+    stockQuantity: 29,
+    elasticWaistband: true,
+    gender: 'girls'
+  },
+  {
+    id: 'mm-11',
+    name: 'Everyday Organic Cotton Striped Play Tee & Shorts',
+    category: 'casual-wear',
+    categoryLabel: 'Casual Wear',
+    price: 19.99,
+    originalPrice: 26.00,
+    rating: 4.8,
+    reviewCount: 134,
+    images: [
+      'https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1596870230751-ebdfce98ec42?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'The definitive daily wardrobe staple for nursery, school, and park play. Yarn-dyed Breton stripes paired with French terry athletic shorts with drawstring waist.',
+    highlights: [
+      'Pure organic long-staple cotton jersey',
+      'Soft ribbed neckband retains shape without stretching out',
+      'Tagless neck label prevents itchy complaints',
+      'Bar-tacked deep pocket pockets'
+    ],
+    fabric: '100% GOTS Certified Organic Cotton',
+    careInstructions: 'Machine wash warm, tumble dry low.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Nautical Navy Stripe', hex: '#1E3A8A' },
+      { name: 'Crimson Red Stripe', hex: '#DC2626' },
+      { name: 'Forest Green Stripe', hex: '#166534' }
+    ],
+    isNewArrival: false,
+    isBestSeller: true,
+    inStock: true,
+    stockQuantity: 50,
+    elasticWaistband: true,
+    gender: 'unisex'
+  },
+  {
+    id: 'mm-12',
+    name: 'Comfort Stretch Denim Joggers with Ribbed Waistband',
+    category: 'denim-collection',
+    categoryLabel: 'Denim Collection',
+    price: 27.99,
+    originalPrice: 36.00,
+    rating: 4.9,
+    reviewCount: 95,
+    images: [
+      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'The cool look of real denim combined with the flexibility and ease of sweatpants. Features thick ribbed elastic waistband with drawstrings and tapered ankle cuffs.',
+    highlights: [
+      'Internal cotton jersey waistband lining for cloud-like comfort',
+      '4-way flex denim enables easy climbing and running',
+      'Room-to-grow expandable elastic fits across growth spurts',
+      'Double reinforced knee darts for high durability'
+    ],
+    fabric: '92% Cotton, 6% Polyester, 2% Spandex Knit Denim',
+    careInstructions: 'Machine wash cold inside out, tumble dry low.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Medium Indigo', hex: '#2563EB' },
+      { name: 'Washed Charcoal', hex: '#1F2937' }
+    ],
+    isNewArrival: true,
+    isBestSeller: true,
+    inStock: true,
+    stockQuantity: 2, // Low stock alert!
+    elasticWaistband: true,
+    gender: 'unisex'
+  },
+  {
+    id: 'mm-13',
+    name: 'Boys Classic Oxford Cotton Button-Down Casual Shirt',
+    category: 'casual-wear',
+    categoryLabel: 'Casual Wear',
+    price: 23.99,
+    originalPrice: 30.00,
+    rating: 4.9,
+    reviewCount: 84,
+    images: [
+      'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1560506840-ec148e82a604?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'Crisp, timeless Oxford weave cotton shirt tailored for active young boys. Features a flexible button-down collar, breathable weave, and rollable sleeves with neat button tabs. A staple for boys fashion in Pakistan.',
+    highlights: [
+      '100% Combed Oxford Cotton weave',
+      'Anti-chafe collar with tag-free neckline',
+      'Reinforced button stitching designed for active boys',
+      'Roll-up sleeve button tabs for easy casual styling'
+    ],
+    fabric: '100% Premium Long-Staple Oxford Cotton',
+    careInstructions: 'Machine wash warm, tumble dry gentle. Warm iron if required.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Classic Sky', hex: '#60A5FA' },
+      { name: 'Pure White', hex: '#F9FAFB' },
+      { name: 'Soft Navy', hex: '#1E3A8A' }
+    ],
+    isNewArrival: true,
+    isBestSeller: true,
+    isCasualShirt: true,
+    inStock: true,
+    stockQuantity: 28,
+    elasticWaistband: false,
+    gender: 'boys'
+  },
+  {
+    id: 'mm-14',
+    name: 'Kids Vacation Resort Camp-Collar Casual Shirt',
+    category: 'casual-wear',
+    categoryLabel: 'Casual Wear',
+    price: 22.99,
+    originalPrice: 29.00,
+    rating: 4.8,
+    reviewCount: 61,
+    images: [
+      'https://images.unsplash.com/photo-1514315384763-ba401779410f?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'Breezy and relaxed Cuban collar casual shirt crafted in lightweight natural cotton-linen blend. Ideal for summer play, family dinners, and weekend trips.',
+    highlights: [
+      'Relaxed vacation fit keeps kids cool in high temperatures',
+      'Open camp collar eliminates tight neck pressure',
+      'Smooth coconut-look buttons with durable fastening',
+      'Hypoallergenic wash with zero harsh chemical softeners'
+    ],
+    fabric: '70% Combed Cotton, 30% Linen',
+    careInstructions: 'Machine wash cold gentle, hang dry.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Desert Sand', hex: '#D1D5DB' },
+      { name: 'Tropical Navy', hex: '#1E3A8A' },
+      { name: 'Sage Leaf', hex: '#86EFAC' }
+    ],
+    isNewArrival: true,
+    isBestSeller: false,
+    isCasualShirt: true,
+    inStock: true,
+    stockQuantity: 34,
+    elasticWaistband: false,
+    gender: 'unisex'
+  },
+  {
+    id: 'mm-15',
+    name: 'Kids Ripstop Denim Shorts with Ribbon Elastic Waist',
+    category: 'denim-collection',
+    categoryLabel: 'Denim Collection',
+    price: 25.99,
+    originalPrice: 34.00,
+    rating: 4.9,
+    reviewCount: 112,
+    images: [
+      'https://images.unsplash.com/photo-1519457431-44ccd64a579b?auto=format&fit=crop&w=1000&q=85',
+      'https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?auto=format&fit=crop&w=1000&q=85'
+    ],
+    description: 'Designed for playground agility! High-flex washed denim cargo shorts fitted with a wide ribbed elastic waistband and drawstring that adapt seamlessly to growing kids from 1 to 12 Years.',
+    highlights: [
+      'Wide ribbed elastic waistband with soft interior lining',
+      'Dual utility cargo flap pockets with secure closures',
+      'Reinforced seat & knee stitching prevents tears',
+      'Pre-washed flexible denim with zero stiff feeling'
+    ],
+    fabric: '98% Cotton, 2% Spandex Flex Denim',
+    careInstructions: 'Machine wash cold inside out, tumble dry low.',
+    availableSizes: [...ALL_SIZES],
+    colors: [
+      { name: 'Vintage Stone', hex: '#3B82F6' },
+      { name: 'Deep Indigo', hex: '#1E3A8A' }
+    ],
+    isNewArrival: true,
+    isBestSeller: true,
+    inStock: true,
+    stockQuantity: 40,
+    elasticWaistband: true,
+    gender: 'unisex'
   }
 ];

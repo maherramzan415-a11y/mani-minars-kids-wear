@@ -13,6 +13,7 @@ import {
   Check
 } from 'lucide-react';
 import { CartItem } from '../types';
+import { ProductImage } from './ProductImage';
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -139,11 +140,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   className="flex gap-3.5 p-3 rounded-2xl border border-slate-200/80 hover:border-slate-300 transition-colors bg-white shadow-2xs"
                 >
                   {/* Thumbnail */}
-                  <img
-                    src={item.product.images[0]}
-                    alt={item.product.name}
-                    className="w-18 h-22 object-cover rounded-xl bg-slate-100 shrink-0"
-                  />
+                  <div className="w-18 h-22 rounded-xl overflow-hidden bg-slate-100 shrink-0">
+                    <ProductImage
+                      src={item.product.images[0]}
+                      alt={item.product.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
 
                   {/* Info */}
                   <div className="flex-1 flex flex-col justify-between">
