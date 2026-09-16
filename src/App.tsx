@@ -138,54 +138,129 @@ export default function App() {
   const [policyModalTab, setPolicyModalTab] = useState<PolicyTab>('about');
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
 
-  // Routing State: handles paths /admin/login, /admin/dashboard, or hashes #admin/login, #/admin/login, #admin
-  const getRouteFromLocation = (): string => {
-    const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-    const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
-    
-    if (path === '/admin/login' || hash === 'admin/login' || hash === 'login') {
-      return '/admin/login';
-    }
-    if (path === '/admin/dashboard' || hash === 'admin/dashboard' || hash === 'admin' || path === '/admin') {
-      return '/admin/dashboard';
-    }
-    return '/';
+  // Category Slug Normalization for URL routes /categories/*
+  const normalizeCategorySlug = (slug: string): ProductCategory | null => {
+    const clean = slug.toLowerCase().trim();
+    if (clean === 'all') return 'all';
+    if (clean === 'boys' || clean === 'boys-collection') return 'boys-collection';
+    if (clean === 'girls' || clean === 'girls-collection') return 'girls-collection';
+    if (clean === 'new' || clean === 'new-arrivals') return 'new-arrivals';
+    if (clean === 'denim' || clean === 'denim-collection') return 'denim-collection';
+    if (clean === 'party' || clean === 'party-wear') return 'party-wear';
+    if (clean === 'casual' || clean === 'casual-wear') return 'casual-wear';
+    return null;
   };
 
-  const [currentRoute, setCurrentRoute] = useState<string>(getRouteFromLocation);
+  const getCategorySlug = (cat: ProductCategory): string => {
+    switch (cat) {
+      case 'boys-collection': return 'boys';
+      case 'girls-collection': return 'girls';
+      case 'new-arrivals': return 'new-arrivals';
+      case 'denim-collection': return 'denim';
+      case 'party-wear': return 'party-wear';
+      case 'casual-wear': return 'casual-wear';
+      default: return 'all';
+    }
+  };
+
+  // Helper to parse current path or hash for client-side routing
+  const getParsedRoute = (): {
+    type: 'admin-login' | 'admin-dashboard' | 'product' | 'category' | 'home';
+    route: string;
+    productId?: string;
+    category?: ProductCategory;
+  } => {
+    const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+    const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
+    const target = path !== '/' ? path : (hash ? '/' + hash : '/');
+
+    if (target === '/admin/login' || target === '/login') {
+      return { type: 'admin-login', route: '/admin/login' };
+    }
+    if (target === '/admin/dashboard' || target === '/admin') {
+      return { type: 'admin-dashboard', route: '/admin/dashboard' };
+    }
+    if (target.startsWith('/products/') || target === '/products') {
+      const rawId = target.replace(/^\/products\/?/, '').split('/')[0];
+      return { type: 'product', route: target, productId: rawId };
+    }
+    if (target.startsWith('/categories/') || target === '/categories') {
+      const rawCat = target.replace(/^\/categories\/?/, '').split('/')[0];
+      const parsedCat = normalizeCategorySlug(rawCat) || 'all';
+      return { type: 'category', route: target, category: parsedCat };
+    }
+    return { type: 'home', route: '/' };
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<string>(() => getParsedRoute().route);
   const [routeNotice, setRouteNotice] = useState<string | null>(null);
 
   const navigateTo = (route: string, notice?: string) => {
     setRouteNotice(notice || null);
     setCurrentRoute(route);
     
-    if (route === '/admin/login') {
-      try {
-        window.history.pushState({ route }, '', '/admin/login');
-      } catch {
-        window.location.hash = '/admin/login';
-      }
-    } else if (route === '/admin/dashboard') {
-      try {
-        window.history.pushState({ route }, '', '/admin/dashboard');
-      } catch {
-        window.location.hash = '/admin/dashboard';
-      }
+    try {
+      window.history.pushState({ route }, '', route);
+    } catch {
+      window.location.hash = route;
+    }
+  };
+
+  const navigateToCategory = (cat: ProductCategory) => {
+    setSelectedCategory(cat);
+    const slug = getCategorySlug(cat);
+    const targetRoute = slug === 'all' ? '/' : `/categories/${slug}`;
+    navigateTo(targetRoute);
+    setTimeout(() => {
+      const el = document.getElementById('products-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 50);
+  };
+
+  const navigateToProduct = (product: Product) => {
+    setQuickViewProduct(product);
+    navigateTo(`/products/${product.id}`);
+  };
+
+  const handleCloseQuickView = () => {
+    setQuickViewProduct(null);
+    if (selectedCategory !== 'all') {
+      navigateTo(`/categories/${getCategorySlug(selectedCategory)}`);
     } else {
-      try {
-        window.history.pushState({ route: '/' }, '', '/');
-      } catch {
-        window.location.hash = '';
-      }
+      navigateTo('/');
     }
   };
 
   // Synchronize route on URL popstate, hash change, and keyboard shortcuts
   useEffect(() => {
     const handleLocationChange = () => {
-      const nextRoute = getRouteFromLocation();
-      setCurrentRoute(nextRoute);
+      const parsed = getParsedRoute();
+      setCurrentRoute(parsed.route);
+
+      if (parsed.type === 'product' && parsed.productId) {
+        const targetId = parsed.productId.toLowerCase();
+        const found = products.find(
+          (p) =>
+            p.id.toLowerCase() === targetId ||
+            p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === targetId
+        );
+        if (found) {
+          setQuickViewProduct(found);
+        }
+      } else if (parsed.type === 'category' && parsed.category) {
+        setQuickViewProduct(null);
+        setSelectedCategory(parsed.category);
+        setTimeout(() => {
+          const el = document.getElementById('products-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 60);
+      } else if (parsed.type === 'home') {
+        setQuickViewProduct(null);
+      }
     };
+
+    // Initial check on load
+    handleLocationChange();
 
     window.addEventListener('popstate', handleLocationChange);
     window.addEventListener('hashchange', handleLocationChange);
@@ -207,7 +282,7 @@ export default function App() {
       window.removeEventListener('hashchange', handleLocationChange);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isAdminLoggedIn]);
+  }, [isAdminLoggedIn, products]);
 
   // Promo Code
   const [appliedPromo, setAppliedPromo] = useState<string | null>('MANI15');
@@ -493,10 +568,8 @@ export default function App() {
         isAdminLoggedIn={isAdminLoggedIn}
         onOpenCart={() => setCartOpen(true)}
         onOpenWishlist={() => {
-          setSelectedCategory('all');
+          navigateToCategory('all');
           setSearchQuery('');
-          const el = document.getElementById('products-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
         onOpenSizeGuide={() => setSizeGuideOpen(true)}
         onOpenTracking={() => {
@@ -510,11 +583,7 @@ export default function App() {
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         selectedCategory={selectedCategory}
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          const el = document.getElementById('products-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
+        onSelectCategory={navigateToCategory}
         currency={currency}
         onChangeCurrency={setCurrency}
       />
@@ -522,26 +591,10 @@ export default function App() {
       <main className="flex-1">
         {/* 2. Hero Section with Smiling Children wearing trendy clothes */}
         <Hero
-          onShopNow={() => {
-            setSelectedCategory('all');
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onNewArrivals={() => {
-            setSelectedCategory('new-arrivals');
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onExploreCollection={() => {
-            setSelectedCategory('all');
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
-          onExploreBoys={() => {
-            setSelectedCategory('new-arrivals');
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onShopNow={() => navigateToCategory('all')}
+          onNewArrivals={() => navigateToCategory('new-arrivals')}
+          onExploreCollection={() => navigateToCategory('all')}
+          onExploreBoys={() => navigateToCategory('boys-collection')}
           onOpenSizeGuide={() => setSizeGuideOpen(true)}
         />
 
@@ -563,30 +616,22 @@ export default function App() {
           currencyRate={activeCurrency.rate}
           wishlistIds={wishlistIds}
           onToggleWishlist={handleToggleWishlist}
-          onQuickView={(p) => setQuickViewProduct(p)}
+          onQuickView={navigateToProduct}
           onAddToCart={handleAddToCart}
           onOpenWhatsAppOrder={handleOpenWhatsAppOrder}
-          onSelectCategory={(cat) => {
-            setSelectedCategory(cat);
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onSelectCategory={navigateToCategory}
         />
 
         {/* 6. The 6 Requested Category Collections */}
         <FeaturedCollections
-          onSelectCategory={(cat) => {
-            setSelectedCategory(cat);
-            const el = document.getElementById('products-section');
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
-          }}
+          onSelectCategory={navigateToCategory}
         />
 
         {/* 7. Main Product Grid with Search, Filters, Large Images & Direct WhatsApp Ordering */}
         <ProductGrid
           products={products}
           selectedCategory={selectedCategory}
-          onSelectCategory={setSelectedCategory}
+          onSelectCategory={navigateToCategory}
           selectedSize={selectedSize}
           onSelectSize={setSelectedSize}
           searchQuery={searchQuery}
@@ -595,7 +640,7 @@ export default function App() {
           currencyRate={activeCurrency.rate}
           wishlistIds={wishlistIds}
           onToggleWishlist={handleToggleWishlist}
-          onQuickView={(p) => setQuickViewProduct(p)}
+          onQuickView={navigateToProduct}
           onAddToCart={handleAddToCart}
           onOpenWhatsAppOrder={handleOpenWhatsAppOrder}
         />
@@ -615,11 +660,7 @@ export default function App() {
 
       {/* 9. Footer with FAQ, Categories, & Legal Policy Links */}
       <Footer
-        onSelectCategory={(cat) => {
-          setSelectedCategory(cat);
-          const el = document.getElementById('products-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
+        onSelectCategory={navigateToCategory}
         onSelectSize={(size) => {
           setSelectedSize(size);
           const el = document.getElementById('products-section');
@@ -642,13 +683,13 @@ export default function App() {
       {/* Modals & Overlays */}
       <ProductQuickView
         product={quickViewProduct}
-        onClose={() => setQuickViewProduct(null)}
+        onClose={handleCloseQuickView}
         currencySymbol={activeCurrency.symbol}
         currencyRate={activeCurrency.rate}
         onAddToCart={handleAddToCart}
         onOpenWhatsAppOrder={handleOpenWhatsAppOrder}
         onOpenSizeGuide={() => {
-          setQuickViewProduct(null);
+          handleCloseQuickView();
           setSizeGuideOpen(true);
         }}
       />
