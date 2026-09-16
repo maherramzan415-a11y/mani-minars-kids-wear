@@ -6,3 +6,8 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Bun lockfiles and cache (ensures Cloudflare Pages only uses npm)
+bun.lock
+bun.lockb
+.bun
