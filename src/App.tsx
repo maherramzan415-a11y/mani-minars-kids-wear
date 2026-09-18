@@ -32,6 +32,11 @@ import { Newsletter } from './components/Newsletter';
 import { Footer } from './components/Footer';
 import { PolicyModal, PolicyTab } from './components/PolicyModal';
 import { ShieldCheck, LogOut, SlidersHorizontal } from 'lucide-react';
+import { 
+  isAdminAuthenticated, 
+  clearAdminSession, 
+  getAdminEmail 
+} from './auth/adminAuth';
 
 export default function App() {
   // Master Store Data
@@ -132,7 +137,7 @@ export default function App() {
   const [trackingOrderId, setTrackingOrderId] = useState('');
   const [adminOpen, setAdminOpen] = useState(false);
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(() => {
-    return sessionStorage.getItem('mm_admin_auth') === 'true';
+    return isAdminAuthenticated();
   });
   const [policyModalOpen, setPolicyModalOpen] = useState(false);
   const [policyModalTab, setPolicyModalTab] = useState<PolicyTab>('about');
@@ -178,6 +183,9 @@ export default function App() {
       return { type: 'admin-login', route: '/admin/login' };
     }
     if (target === '/admin/dashboard' || target === '/admin') {
+      if (!isAdminAuthenticated()) {
+        return { type: 'admin-login', route: '/admin/login' };
+      }
       return { type: 'admin-dashboard', route: '/admin/dashboard' };
     }
     if (target.startsWith('/products/') || target === '/products') {
@@ -234,6 +242,16 @@ export default function App() {
   // Synchronize route on URL popstate, hash change, and keyboard shortcuts
   useEffect(() => {
     const handleLocationChange = () => {
+      const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+      const hash = window.location.hash.toLowerCase().replace(/^#\/?/, '').replace(/\/$/, '');
+      const rawTarget = path !== '/' ? path : (hash ? '/' + hash : '/');
+
+      // Direct access to /admin/dashboard without login must redirect to /admin/login
+      if ((rawTarget === '/admin/dashboard' || rawTarget === '/admin') && !isAdminAuthenticated()) {
+        navigateTo('/admin/login', 'Access restricted. Please sign in with authorized administrator credentials to access the admin dashboard.');
+        return;
+      }
+
       const parsed = getParsedRoute();
       setCurrentRoute(parsed.route);
 
@@ -431,13 +449,18 @@ export default function App() {
   };
 
   const handleAdminLogout = () => {
-    sessionStorage.removeItem('mm_admin_auth');
-    sessionStorage.removeItem('mm_admin_token');
-    sessionStorage.removeItem('mm_admin_email');
+    clearAdminSession();
     setIsAdminLoggedIn(false);
     setAdminOpen(false);
     navigateTo('/admin/login', 'You have been successfully signed out of the admin session.');
   };
+
+  // Enforce auth requirement on admin dashboard route
+  useEffect(() => {
+    if (currentRoute === '/admin/dashboard' && !isAdminLoggedIn) {
+      navigateTo('/admin/login', 'Access restricted. Please sign in with authorized administrator credentials to access the admin dashboard.');
+    }
+  }, [currentRoute, isAdminLoggedIn]);
 
   const handleOpenPolicyTab = (tab: PolicyTab) => {
     setPolicyModalTab(tab);
@@ -537,7 +560,7 @@ export default function App() {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
               <span>Admin Mode Active:</span>
             </span>
-            <span className="text-slate-300 font-mono text-[11px] hidden sm:inline">maniminarskids@gmail.com</span>
+            <span className="text-slate-300 font-mono text-[11px] hidden sm:inline">{getAdminEmail()}</span>
           </div>
           <div className="flex items-center gap-3">
             <button

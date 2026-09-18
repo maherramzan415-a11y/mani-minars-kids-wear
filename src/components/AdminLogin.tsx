@@ -9,12 +9,15 @@ import {
   CheckCircle2, 
   ArrowRight, 
   X,
-  KeyRound,
   ArrowLeft,
   Store,
   ShieldAlert
 } from 'lucide-react';
-import { STORE_EMAIL } from '../types';
+import { 
+  validateAdminCredentials, 
+  setAdminSession, 
+  INVALID_CREDENTIALS_ERROR 
+} from '../auth/adminAuth';
 
 interface AdminLoginProps {
   isOpen: boolean;
@@ -35,16 +38,12 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
 }) => {
   if (!isOpen && !isFullPage) return null;
 
-  const [email, setEmail] = useState('maniminarskids@gmail.com');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [loginSuccess, setLoginSuccess] = useState(false);
-
-  const getStoredPassword = (): string => {
-    return localStorage.getItem('mm_admin_pwd') || 'ManiAdmin2026!';
-  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,28 +51,16 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
     setIsSubmitting(true);
 
     setTimeout(() => {
-      const trimmedEmail = email.trim().toLowerCase();
-      const currentAdminPassword = getStoredPassword();
+      const isValid = validateAdminCredentials(email, password);
 
-      if (trimmedEmail !== STORE_EMAIL.toLowerCase()) {
-        setError(`Access Denied: Only the official admin account (${STORE_EMAIL}) has dashboard permissions.`);
+      if (!isValid) {
+        setError(INVALID_CREDENTIALS_ERROR);
         setIsSubmitting(false);
         return;
       }
 
-      if (password !== currentAdminPassword) {
-        setError('Invalid security password. Please check your credentials and retry.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Success
-      const sessionToken = `mm_admin_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
-      sessionStorage.setItem('mm_admin_auth', 'true');
-      sessionStorage.setItem('mm_admin_token', sessionToken);
-      sessionStorage.setItem('mm_admin_email', trimmedEmail);
-      sessionStorage.setItem('mm_admin_login_time', new Date().toISOString());
-
+      // Success: secure administrator authenticated
+      setAdminSession(email);
       setLoginSuccess(true);
       setIsSubmitting(false);
 
@@ -81,12 +68,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
         onLoginSuccess();
       }, 500);
     }, 400);
-  };
-
-  const handleAutofillDemo = () => {
-    setEmail('maniminarskids@gmail.com');
-    setPassword(getStoredPassword());
-    setError('');
   };
 
   const formContent = (
@@ -146,7 +127,7 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
       <form onSubmit={handleLogin} className="mt-5 space-y-4">
         <div>
           <label className="block text-xs font-bold text-slate-700 mb-1">
-            Authorized Admin Email
+            Administrator Email
           </label>
           <div className="relative">
             <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
@@ -156,31 +137,16 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="maniminarskids@gmail.com"
+              placeholder="Enter admin email"
               className="w-full pl-10 pr-3 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-800 focus:bg-white focus:border-blue-950 focus:ring-2 focus:ring-blue-950/10 transition-all outline-hidden"
             />
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
-            Designated admin: <strong className="text-slate-600 font-mono">maniminarskids@gmail.com</strong>
-          </p>
         </div>
 
         <div>
-          <div className="flex items-center justify-between mb-1">
-            <label className="block text-xs font-bold text-slate-700">
-              Security Password
-            </label>
-            <button
-              type="button"
-              id="admin-autofill-demo-btn"
-              onClick={handleAutofillDemo}
-              className="text-[11px] font-bold text-blue-900 hover:text-blue-700 hover:underline cursor-pointer flex items-center gap-1"
-              title="Autofill standard admin credentials for test login"
-            >
-              <KeyRound className="w-3 h-3" />
-              <span>Autofill Demo Pass</span>
-            </button>
-          </div>
+          <label className="block text-xs font-bold text-slate-700 mb-1">
+            Security Password
+          </label>
           <div className="relative">
             <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
             <input

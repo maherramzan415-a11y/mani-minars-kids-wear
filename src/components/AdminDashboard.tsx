@@ -44,6 +44,7 @@ import {
   STORE_EMAIL,
   WHATSAPP_NUMBER 
 } from '../types';
+import { getAdminEmail } from '../auth/adminAuth';
 import { ProductImage } from './ProductImage';
 
 interface AdminDashboardProps {
@@ -102,10 +103,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
   const [selectedOrderDetails, setSelectedOrderDetails] = useState<Order | null>(null);
-
-  // Password change state
-  const [newPasswordInput, setNewPasswordInput] = useState('');
-  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
 
   // Product Form state
   const [formName, setFormName] = useState('');
@@ -323,14 +320,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     downloadAnchor.remove();
   };
 
-  // Handle Password Update
-  const handleUpdatePassword = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newPasswordInput.length < 6) return;
-    localStorage.setItem('mm_admin_pwd', newPasswordInput);
-    setPasswordChangeSuccess(true);
-    setNewPasswordInput('');
-    setTimeout(() => setPasswordChangeSuccess(false), 3000);
+  // Data export and settings
+  const handleExportJSON = () => {
+    const dataStr = JSON.stringify({ products, orders, exportedAt: new Date().toISOString() }, null, 2);
+    const blob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const downloadAnchor = document.createElement('a');
+    downloadAnchor.setAttribute('href', url);
+    downloadAnchor.setAttribute('download', `mani_minars_catalog_${new Date().toISOString().split('T')[0]}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
   };
 
   // Filtered Products
@@ -1130,45 +1130,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* ======================= TAB 5: SETTINGS ======================= */}
           {activeTab === 'settings' && (
             <div className="max-w-2xl mx-auto space-y-6">
-              {/* Change Password Card */}
+              {/* Administrator Account Security Card */}
               <div className="p-6 bg-white border border-slate-200 rounded-3xl shadow-xs">
                 <div className="flex items-center gap-2.5 mb-2">
                   <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-900 flex items-center justify-center">
-                    <KeyRound className="w-4 h-4" />
+                    <ShieldCheck className="w-4 h-4 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-extrabold text-blue-950">Update Admin Password</h3>
-                    <p className="text-xs text-slate-500">Change your secure password for accessing this dashboard</p>
+                    <h3 className="text-sm font-extrabold text-blue-950">Administrator Security</h3>
+                    <p className="text-xs text-slate-500">Authorized Single Administrator Account</p>
                   </div>
                 </div>
 
-                {passwordChangeSuccess && (
-                  <div className="my-3 p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-800 flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-emerald-600" />
-                    <span>Admin password has been securely updated!</span>
+                <div className="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-500 font-medium">Active Admin Account</span>
+                    <span className="font-mono font-bold text-blue-950 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+                      {getAdminEmail()}
+                    </span>
                   </div>
-                )}
-
-                <form onSubmit={handleUpdatePassword} className="mt-4 space-y-3">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 mb-1">New Password</label>
-                    <input
-                      type="password"
-                      required
-                      minLength={6}
-                      placeholder="Enter at least 6 characters"
-                      value={newPasswordInput}
-                      onChange={(e) => setNewPasswordInput(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:bg-white focus:ring-2 focus:ring-blue-950"
-                    />
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-500 font-medium">Authentication Policy</span>
+                    <span className="inline-flex items-center gap-1.5 text-emerald-700 font-bold bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                      <CheckCircle className="w-3.5 h-3.5" />
+                      Enforced Single Secure Account
+                    </span>
                   </div>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-blue-950 hover:bg-blue-900 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
-                  >
-                    Save New Password
-                  </button>
-                </form>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-slate-500 font-medium">Session Storage</span>
+                    <span className="font-mono text-slate-600">Protected SessionToken</span>
+                  </div>
+                </div>
               </div>
 
               {/* Data Export & Backup */}
